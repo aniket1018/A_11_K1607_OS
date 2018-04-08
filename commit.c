@@ -1,22 +1,14 @@
-int main()
-{
-	int i;
-	sem_init(&buferMut,0,1);
-	sem_init(&full,0,0);
+sem_init(&empty, 0, arraylen);
+    int fault;
 
-    printf("-------------------------------------------Producer Consumer program-------------------------------------------\n");
-	printf("\nNumber of Producers : ");
-	scanf("%d", &productnum);
-	ProduCer = (pthread_t*) malloc(productnum*sizeof(pthread_t));
-	printf("---------------------------------------------------------------------------------------");
-	
-	printf("\nNumber of Consumers : ");
-	scanf("%d", &consumernum);
-	ConsuMer = (pthread_t*) malloc(consumernum*sizeof(pthread_t));
-	printf("---------------------------------------------------------------------------------------");
-	
-	printf("\nBlock size :");
-	scanf("%d", &arraylen);
-	array = (int*) malloc(arraylen * sizeof(int));
-	printf("---------------------------------------------------------------------------------------");
-}
+	for(i = 0;i < productnum; i++){
+	fault = pthread_create(ProduCer + i, NULL, &Producer, NULL);
+	if(fault != 0){
+	printf("\nSome problem in creating producer %d: %s", i + 1, strerror(fault));
+	}else{
+	printf("\nProducer created successfully %d", i + 1);
+	}
+	}
+
+	for(i = 0; i < consumernum; i++){
+	fault = pthread_create(ConsuMer + i, NULL, &Consumer, NULL);
